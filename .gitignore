@@ -1,0 +1,17 @@
+# 敏感信息：不要把数据库密码 / API Key 提交到仓库
+.streamlit/secrets.toml
+*.db
+*.db-wal
+*.db-shm
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# 系统
+.DS_Store
+Thumbs.db

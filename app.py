@@ -47,6 +47,27 @@ for _m, _mod in list(sys.modules.items()):
 
 import streamlit as st
 
+
+def _expose_streamlit_secrets() -> None:
+    """把 Streamlit secrets 里的标量项桥接为环境变量。
+
+    Streamlit Cloud 的 secrets 不会自动注入 os.environ，而 core.settings
+    与 data.db 只读环境变量；在导入业务模块前统一桥接，本地与云端共用。
+    """
+    try:
+        secrets = st.secrets
+        items = list(secrets.items())
+    except Exception:
+        return
+    for key, value in items:
+        if not isinstance(value, (str, int, float, bool)):
+            continue  # 跳过嵌套节，避免把 dict 塞进环境变量
+        if not os.environ.get(key):
+            os.environ[key] = str(value)
+
+
+_expose_streamlit_secrets()
+
 from core.diagnostics import check_environment
 from core.errors import AnalysisBusyError
 from core.facade import InterviewCoachFacade

@@ -2,13 +2,11 @@
 from __future__ import annotations
 
 import os
-import sqlite3
 import sys
 from typing import Any, Dict, List
 
 from core.settings import get_settings
-
-_DB_PATH = os.path.join(os.path.dirname(__file__), "..", "prism.db")
+from data.db import connect, is_postgres
 
 
 def _model_path(model_size: str) -> str | None:
@@ -142,10 +140,11 @@ def check_environment() -> List[Dict[str, Any]]:
         )
 
     try:
-        with sqlite3.connect(_DB_PATH, timeout=2) as conn:
+        with connect() as conn:
             conn.execute("SELECT 1")
+        detail = "Postgres/Supabase 已连接" if is_postgres() else "prism.db 可读写"
         items.append(
-            {"name": "数据库", "status": "ok", "detail": "prism.db 可读写"}
+            {"name": "数据库", "status": "ok", "detail": detail}
         )
     except Exception as exc:
         items.append(

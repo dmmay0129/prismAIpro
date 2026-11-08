@@ -12,7 +12,7 @@
     "model": "qwen2:1.5b",
     "timeout_sec": 30,
     "llm_provider": "auto",
-    "deepseek_api_key": "sk-2295677c046149108718f8fc9ae27ff1",
+    "deepseek_api_key": "",
     "deepseek_model": "deepseek-chat",
     "deepseek_base_url": "https://api.deepseek.com/chat/completions",
     "deepseek_max_tokens": 2048
