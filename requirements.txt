@@ -13,3 +13,5 @@ opencv-python-headless>=4.8,<5
 numpy>=1.24,<3
 # 当前流水线未直接使用 librosa，保留用于后续音频特征扩展
 librosa>=0.10,<2
+
+opencc-python-reimplemented
