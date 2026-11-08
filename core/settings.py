@@ -141,6 +141,24 @@ def get_settings() -> Dict[str, Any]:
     """返回合并后的配置；进程内缓存，测试时可调用 reload_settings()。"""
     settings = _deep_merge(_DEFAULT_SETTINGS, _load_file())
     _apply_env(settings)
+    
+    #云端部署时，强行读取 Streamlit Secrets
+    try:
+        import streamlit as st
+        # 尝试读取 DeepSeek Key
+        secret_key = st.secrets.get("PRISMAI_DEEPSEEK_API_KEY")
+        if secret_key:
+            settings["content"]["deepseek_api_key"] = str(secret_key).strip()
+            settings["content"]["llm_provider"] = "deepseek"
+            
+        # 尝试读取数据库 URL
+        secret_db = st.secrets.get("DATABASE_URL")
+        if secret_db:
+            os.environ["DATABASE_URL"] = str(secret_db).strip()
+    except Exception:
+        # 本地没有 st.secrets 时会静默跳过
+        pass
+        
     return settings
 
 
